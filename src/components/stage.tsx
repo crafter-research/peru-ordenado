@@ -7,6 +7,7 @@ import {
   type Box,
   gridLayout,
   LABEL_H,
+  labelWidth,
   mapLayout,
   type Place,
 } from "@/lib/layout";
@@ -296,7 +297,10 @@ export function Stage({
       for (const it of labels) {
         const { x, y, s, a } = it.cur;
         const bottom = y + ((it.shape.bbox[3] - it.shape.bbox[1]) * s) / 2;
-        const w = Math.max((it.shape.bbox[2] - it.shape.bbox[0]) * s, 44);
+        const w = Math.max(
+          (it.shape.bbox[2] - it.shape.bbox[0]) * s,
+          labelWidth(it.shape.name),
+        );
         ctx.globalAlpha = a;
         ctx.fillStyle = ink;
         ctx.font = `500 9.5px ${font}`;
