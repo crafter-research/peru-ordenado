@@ -139,21 +139,26 @@ export async function renderCard(c: CardInput): Promise<Blob> {
     ctx.fillText(r.text, x, 1580);
     ctx.fillStyle = "#7a6552";
     ctx.font = `400 25px ${sans}`;
-    ctx.fillText(r.label, x, 1625);
+    r.label.split(" ").forEach((w, k) => ctx.fillText(w, x, 1625 + k * 28));
   });
+
+  // How to read the threads: the length is the rank among the districts, the number is the real figure.
+  ctx.fillStyle = "#7a6552";
+  ctx.font = `400 25px ${sans}`;
+  ctx.fillText("Hilo largo = mejor puesto entre los distritos del país. El número es el dato real.", W / 2, 1700);
 
   ctx.fillStyle = "#5a4636";
   ctx.font = `400 34px ${sans}`;
   wrap(ctx, c.line, 880)
     .slice(0, 2)
-    .forEach((l, i) => ctx.fillText(l, W / 2, 1705 + i * 46));
+    .forEach((l, i) => ctx.fillText(l, W / 2, 1755 + i * 44));
 
   ctx.fillStyle = "#3a2a1c";
   ctx.font = `600 36px ${sans}`;
-  ctx.fillText(c.url.replace(/^https?:\/\//, ""), W / 2, 1810);
+  ctx.fillText(c.url.replace(/^https?:\/\//, ""), W / 2, 1850);
   ctx.fillStyle = "#7a6552";
   ctx.font = `400 28px ${sans}`;
-  ctx.fillText("Busca el tuyo · datos abiertos del MEF", W / 2, 1856);
+  ctx.fillText("Busca el tuyo · datos abiertos del Estado", W / 2, 1886);
 
   return new Promise((res, rej) =>
     cv.toBlob((b) => (b ? res(b) : rej(new Error("png"))), "image/png"),

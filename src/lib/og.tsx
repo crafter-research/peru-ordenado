@@ -214,7 +214,7 @@ export async function ogPlace(id: string, metric: Metric) {
           </div>
         </div>
         <div style={{ display: "flex", fontSize: 18, color: "#857b6e" }}>
-          Busca el tuyo · Crafter Research · datos abiertos del MEF
+          Busca el tuyo · Crafter Research · datos abiertos del Estado
         </div>
       </div>
       <svg width="550" height="630" viewBox="0 0 550 630" aria-hidden="true">

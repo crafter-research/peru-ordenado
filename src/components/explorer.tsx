@@ -675,8 +675,9 @@ function PlaceCard({
       )}
       <FichaQuipu rows={rows} />
       <p className="-mt-1 text-[11.5px] leading-relaxed text-muted-foreground">
-        {rankText ? `${rankText}. ` : ""}Cada hilo es más largo cuanto más
-        arriba queda frente a los demás {LEVELS[level].plural}.
+        {rankText ? `${rankText}. ` : ""}El largo del hilo no es el número: es
+        el puesto entre los {LEVELS[level].plural} (más largo, mejor puesto). El
+        número de abajo es el dato real.
       </p>
       <details className="group -mt-1 text-[11.5px] leading-relaxed text-muted-foreground">
         <summary className="cursor-pointer list-none transition hover:text-foreground">
@@ -687,7 +688,7 @@ function PlaceCard({
           <li><b className="font-medium text-foreground/80">Señal 4G:</b> de sus pueblos y caseríos, cuántos tienen señal 4G de celular. Cuenta lugares, no personas.</li>
           <li><b className="font-medium text-foreground/80">Emergencias:</b> veces que el Gobierno declaró estado de emergencia entre 2017 y 2024.</li>
           <li><b className="font-medium text-foreground/80">Zonas críticas:</b> zonas con peligro de derrumbes, huaicos o deslizamientos (INGEMMET).</li>
-          <li><b className="font-medium text-foreground/80">Digital:</b> puntos de 0 a 100 de presencia digital de su municipalidad en gob.pe.</li>
+          <li><b className="font-medium text-foreground/80">Presencia digital:</b> puntos de 0 a 100 de <a href="https://muniscan.crafter.ing" target="_blank" rel="noreferrer" className="underline underline-offset-4">muniscan</a> (Crafter Research): qué tanto usa su municipalidad las plataformas del Estado y qué sistemas propios tiene. 100 es la mejor del país, no un puntaje perfecto.</li>
         </ul>
       </details>
       {other ? (
@@ -1180,9 +1181,13 @@ function Legend({ metric, shapes }: { metric: Metric; shapes: Shape[] }) {
       )}
       {metric === "digital" && (
         <p className="text-[11.5px] leading-relaxed text-muted-foreground">
-          Índice de muniscan: qué tanto sistema propio declara cada
-          municipalidad en gob.pe. Provincias y departamentos muestran el
-          promedio de sus distritos.
+          Índice de{" "}
+          <a href="https://muniscan.crafter.ing" target="_blank" rel="noreferrer" className="underline underline-offset-4">muniscan</a>{" "}
+          (Crafter Research), con datos públicos de gob.pe: pesa 45 % los
+          sistemas propios, 35 % el uso de plataformas del Estado y 20 % que
+          publique trámites y normas. 100 es la mejor municipalidad de la
+          corrida. Provincias y departamentos muestran el promedio de sus
+          distritos.
         </p>
       )}
     </div>
@@ -1244,7 +1249,7 @@ function sentence(shape: Shape, metric: Metric): string | undefined {
     case "ornato":
       return `${de100(v)} de cada 100 soles de sus obras 2024 fueron para plazas, parques, arcos o monumentos.`;
     case "digital":
-      return `Su municipalidad tiene ${v} puntos de 100 en presencia digital (índice muniscan de lo que declara en gob.pe). Más puntos, más presencia en línea.`;
+      return `Su municipalidad tiene ${v} puntos de 100 en presencia digital (índice muniscan: sistemas propios, uso de plataformas del Estado y trámites publicados). 100 es la mejor del país.`;
     case "cobertura":
       return `${de100(v)} de cada 100 pueblos y caseríos (centros poblados) tienen señal 4G de celular. Cuenta lugares, no personas.`;
     case "emergencias":

@@ -16,7 +16,7 @@ const ROWS: [Metric, string, (v: number) => string][] = [
   ["cobertura", "Señal 4G", (v) => `${Math.round(v * 100)} %`],
   ["emergencias", "Emergencias", count],
   ["zonas", "Zonas críticas", count],
-  ["digital", "Digital", (v) => String(Math.round(v))],
+  ["digital", "Presencia digital", (v) => String(Math.round(v))],
 ];
 
 /** Every layer we have for a place, each compared with the places of its own level. */

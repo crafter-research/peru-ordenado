@@ -134,8 +134,26 @@ export function AboutDialog({
               >
                 muniscan
               </a>{" "}
-              (corrida del 21 de agosto de 2026), unido por nombre de
-              municipalidad. Los nombres ambiguos quedan sin datos.
+              (Crafter Research, corrida del 21 de agosto de 2026), unido por
+              nombre de municipalidad. Los nombres ambiguos quedan sin datos.
+              Se armó con una sola petición a la página de cada municipalidad
+              en gob.pe y es una suma de tres ejes: sistemas propios (45 %,
+              solo cuenta si el dominio lleva el nombre de la entidad), uso de
+              las plataformas centrales del Estado (35 %, hosts que aparecen en
+              100 o más entidades) y publicar trámites y normas (20 %, un piso
+              legal más que un logro). Los pesos son una decisión de diseño,
+              no un ajuste estadístico, y cada eje se divide entre el máximo de
+              la corrida: 100 es la mejor del país, no un puntaje perfecto.
+              El método completo está en{" "}
+              <a
+                href="https://github.com/crafter-research/muniscan/blob/main/METHOD.md"
+                target="_blank"
+                rel="noreferrer"
+                className="text-accent underline underline-offset-4"
+              >
+                METHOD.md
+              </a>
+              .
             </p>
           </section>
 
