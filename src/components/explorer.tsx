@@ -270,7 +270,7 @@ export function Explorer() {
           />
         ) : (
           <div className="grid size-full place-items-center text-[12px] text-muted-foreground">
-            Cargando {count(1873)} distritos…
+            Cargando {count(1873)} distritos del mapa…
           </div>
         )}
         {hit && (

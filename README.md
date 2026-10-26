@@ -5,7 +5,7 @@ Unofficial Crafter Research prototype. The map of Peru taken apart: every depart
 ## Views
 
 - **Mapa / Ordenado**: geographic positions, or rows sorted by the selected metric.
-- **Nivel**: 25 departments, 196 provinces, 1,873 districts. Going down, children fly out of their parent; going up, they fold back into it.
+- **Nivel**: 25 departments, 196 provinces, 1,873 districts drawn (INEI lists 1,893 as of 14 October 2026: the IGN 2020 boundaries miss the districts created later, and Mazamari and Pangoa are one shape). Going down, children fly out of their parent; going up, they fold back into it.
 - **Metric**: area (IGN), local-government investment budget (PIM, genérica 2.6), investment executed (devengado / PIM), share of investment in ornament (MEF project names classified by Jev), and muniscan's digital-surface index.
 - **Historia**: an 8-step guided story with captions computed from the data (`src/lib/story.ts`), auto-advancing with pause, previous/next and arrow keys; the featured shapes get a ring and a callout. `?video` opens a chrome-free 4:5 stage that loops the story, for screen recording.
 

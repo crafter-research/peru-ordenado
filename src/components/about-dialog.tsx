@@ -93,8 +93,10 @@ export function AboutDialog({
             </h3>
             <p>
               Límites y áreas: Instituto Geográfico Nacional (2020), publicados
-              por OCHA en HDX. Son 1,873 distritos; los creados después de 2020
-              no aparecen.
+              por OCHA en HDX. El Perú tiene 1,893 distritos al 14 de octubre de
+              2026, según el directorio de municipalidades del INEI. El mapa
+              dibuja 1,873: faltan 18 creados después de 2020 y Mazamari y
+              Pangoa van juntos en una sola forma.
             </p>
             <p>
               Inversión: Presupuesto y Ejecución de Gasto 2024 del portal de
