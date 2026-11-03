@@ -33,8 +33,10 @@ export type Shape = {
     zonas: number;
     zonasN: number;
   };
-  /** Habitantes proyectados por el INEI al 30 de junio de 2025 (referencial). */
+  /** Habitantes según el Censo 2025 del INEI (censada más omitida). */
   pob?: number;
+  /** Parte de `pob` que el INEI estima que quedó sin censar (omitida). */
+  omit?: number;
   /** muniscan digital-surface index 0–100 (provinces and departments: mean of their districts). */
   digital?: number;
   /**
@@ -56,6 +58,8 @@ export type Metric =
   | "area"
   | "poblacion"
   | "densidad"
+  | "porHabitante"
+  | "omision"
   | "inversion"
   | "ejecucion"
   | "quipu"
@@ -75,11 +79,19 @@ export const METRICS: Record<Metric, { label: string; title: string }> = {
   area: { label: "¿Qué tan grande es?", title: "ordenados por área (km²)" },
   poblacion: {
     label: "¿Cuánta gente vive ahí?",
-    title: "ordenados por población proyectada 2025 (INEI)",
+    title: "ordenados por población (Censo 2025)",
   },
   densidad: {
     label: "¿Qué tan poblado está?",
-    title: "ordenados por habitantes por km² (proyección 2025)",
+    title: "ordenados por habitantes por km² (Censo 2025)",
+  },
+  porHabitante: {
+    label: "¿Cuánto presupuesto para obras hay por habitante?",
+    title: "ordenados por presupuesto de inversión de este año por habitante",
+  },
+  omision: {
+    label: "¿Cuánta gente no fue censada?",
+    title: "ordenados por % de población que quedó sin censar (Censo 2025)",
   },
   inversion: {
     label: "¿Cuánto presupuesto tiene para obras?",
@@ -124,9 +136,13 @@ const GUIDE: Record<Metric, string> = {
   area:
     "Cada forma es un {lugar} del Perú dibujado a su tamaño real. Van de más grande a más chico. Los colores solo sirven para distinguir una región de otra.",
   poblacion:
-    "Cada forma es un {lugar}. Cuántas personas viven ahí según la proyección del INEI para 2025, hecha antes del Censo 2025 (puede diferir del conteo). Más oscuro: más gente.",
+    "Cada forma es un {lugar}. Cuántas personas viven ahí según el Censo 2025 del INEI. Más oscuro: más gente.",
   densidad:
-    "Cada forma es un {lugar}. Cuántas personas viven por cada kilómetro cuadrado (proyección INEI 2025 entre el área). Más oscuro: más apretado. Un distrito enorme y casi vacío sale claro aunque tenga mucha gente.",
+    "Cada forma es un {lugar}. Cuántas personas viven por cada kilómetro cuadrado (Censo 2025 entre el área). Más oscuro: más apretado. Un distrito enorme y casi vacío sale claro aunque tenga mucha gente.",
+  porHabitante:
+    "Cada forma es un {lugar}. Cuántos soles de presupuesto para obras tiene este año por cada persona que vive ahí (Censo 2025). Más oscuro: más soles por persona. Un distrito pequeño con un proyecto grande sale oscuro sin que eso diga cómo está su gente.",
+  omision:
+    "Cada forma es un {lugar}. De cada 100 personas que viven ahí, cuántas el censo no logró contar y el INEI estimó aparte. Más oscuro: más gente sin censar, así que su cifra de población es menos segura.",
   inversion:
     "Cada forma es un {lugar}. Cuanto más oscuro el color, más presupuesto tiene la municipalidad para hacer obras (puentes, colegios, caminos, plazas) en 2024. Es el presupuesto del año, no de toda la vida.",
   ejecucion:
@@ -157,6 +173,8 @@ export const SOURCE: Record<Metric, string> = {
   area: "IGN",
   poblacion: "INEI",
   densidad: "INEI · IGN",
+  porHabitante: "MEF 2026 · INEI",
+  omision: "INEI",
   inversion: "MEF 2024",
   ejecucion: "MEF 2024",
   quipu: "MEF 2026 · quipu",
@@ -186,6 +204,10 @@ export function value(shape: Shape, metric: Metric): number | undefined {
   if (metric === "poblacion") return shape.pob;
   if (metric === "densidad")
     return shape.pob !== undefined && shape.area > 0 ? shape.pob / shape.area : undefined;
+  if (metric === "porHabitante")
+    return shape.pob && shape.avance?.pim ? shape.avance.pim / shape.pob : undefined;
+  if (metric === "omision")
+    return shape.pob && shape.omit !== undefined ? shape.omit / shape.pob : undefined;
   if (metric === "quipu")
     return shape.avance?.pim ? shape.avance.dev / shape.avance.pim : undefined;
   if (metric === "cobertura")
