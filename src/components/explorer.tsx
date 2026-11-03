@@ -760,6 +760,7 @@ const CHIPS: [Metric, string][] = [
   ["emergencias", "Emergencias"],
   ["zonas", "Zonas críticas"],
   ["digital", "Digital"],
+  ["internet", "Internet"],
   ["poblacion", "Población"],
   ["densidad", "Densidad"],
   ["area", "Tamaño"],
@@ -1075,6 +1076,7 @@ const UNIT: Partial<Record<Metric, string>> = {
   densidad: "Habitantes por kilómetro cuadrado (Censo 2025)",
   porHabitante: "Soles de presupuesto para obras por habitante, este año",
   omision: "Parte de la población que quedó sin censar",
+  internet: "Parte de la gente (3 años o más) que usó internet",
 };
 
 function Legend({ metric, shapes }: { metric: Metric; shapes: Shape[] }) {
@@ -1150,6 +1152,14 @@ function Legend({ metric, shapes }: { metric: Metric; shapes: Shape[] }) {
         colors: stops.map((t) => terracotta(t)),
         lo: `S/ ${count(Math.round(r[0]))} o menos`,
         hi: `S/ ${count(Math.round(r[1]))} o más`,
+      };
+    })(),
+    internet: (() => {
+      const r = rangeFor(shapes, "internet");
+      return {
+        colors: stops.map((t) => terracotta(t)),
+        lo: `${Math.round(r[0] * 100)} % o menos`,
+        hi: `${Math.round(r[1] * 100)} % o más`,
       };
     })(),
     omision: (() => {
@@ -1253,6 +1263,12 @@ function sentence(shape: Shape, metric: Metric): string | undefined {
     return `Viven ${count(v)} personas, según el Censo 2025 del INEI (personas censadas más las que el INEI estima que quedaron sin censar).`;
   if (metric === "porHabitante" && v !== undefined)
     return `Tiene S/ ${count(Math.round(v))} de presupuesto para obras este año por cada persona que vive ahí (${count(shape.pob ?? 0)} habitantes del Censo 2025). Un monto alto no siempre es bienestar: pasa también en lugares con pocos habitantes y un proyecto grande.`;
+  if (metric === "internet" && v !== undefined)
+    return `${de100(v)} de cada 100 personas de 3 años o más usaron internet en los últimos 3 meses (Censo 2025).${
+      shape.digital !== undefined
+        ? ` Su municipalidad tiene ${shape.digital} puntos de 100 en presencia digital: son dos cosas distintas, lo que hace la gente y lo que hace la municipalidad.`
+        : ""
+    }`;
   if (metric === "omision" && v !== undefined)
     return `El censo no logró contar a ${count(shape.omit ?? 0)} de sus ${count(shape.pob ?? 0)} habitantes (${sinCensar(v)}); el INEI los estimó aparte. Mientras más sin censar, menos segura es la cifra de población.`;
   if (metric === "densidad" && v !== undefined)
@@ -1318,6 +1334,8 @@ function countryText(data: Dataset, metric: Metric): string | undefined {
       const p = sum((s) => s.pob ?? 0);
       return p > 0 ? `S/ ${count(Math.round(sum((s) => s.avance?.pim ?? 0) / p))} por habitante` : undefined;
     }
+    case "internet":
+      return share(sum((s) => s.net ?? 0), sum((s) => s.netBase ?? 0));
     case "omision": {
       const p = sum((s) => s.pob ?? 0);
       return p > 0 ? `${sinCensar(sum((s) => s.omit ?? 0) / p)} de la población sin censar` : undefined;

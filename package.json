@@ -18,7 +18,8 @@
     "data:territory": "bun scripts/build-territory.ts",
     "data:demonyms": "bun scripts/build-demonyms.ts",
     "data:poblacion": "bun scripts/build-poblacion.ts",
-    "data:layers": "bun data:names && bun data:quipu && bun data:territory && bun data:demonyms && bun data:poblacion"
+    "data:internet": "bun scripts/build-internet.ts",
+    "data:layers": "bun data:names && bun data:quipu && bun data:territory && bun data:demonyms && bun data:poblacion && bun data:internet"
   },
   "packageManager": "bun@1.3.11",
   "dependencies": {
