@@ -4,7 +4,7 @@
 import type { Dataset, Shape } from "../src/lib/shapes";
 
 const data: Dataset = await Bun.file("public/data/shapes.json").json();
-const { año, pob }: { año: number; pob: Record<string, number> } = await Bun.file(
+const { año, pob, omit }: { año: number; pob: Record<string, number>; omit: Record<string, number> } = await Bun.file(
   "data/poblacion-2025.json",
 ).json();
 
@@ -13,9 +13,12 @@ let n = 0;
 for (const level of ["dep", "prov", "dist"] as const) {
   for (const s of data[level] as Shape[]) {
     const v = pob[code(s)];
-    if (v === undefined) delete s.pob;
-    else {
+    if (v === undefined) {
+      delete s.pob;
+      delete s.omit;
+    } else {
       s.pob = v;
+      s.omit = omit[code(s)];
       if (level === "dist") n++;
     }
   }

@@ -28,7 +28,7 @@ import {
   quipuColor,
   terracotta,
 } from "@/lib/color";
-import { count, densidad, habitantes, km2, pct, soles } from "@/lib/format";
+import { count, densidad, habitantes, km2, pct, sinCensar, soles } from "@/lib/format";
 import {
   parseSelection,
   type Selection,
@@ -654,7 +654,8 @@ function PlaceCard({
           {shape.pob !== undefined && (
             <p className="mt-1 text-[12px] text-muted-foreground">
               {habitantes(shape.pob)} · {densidad(shape.pob / shape.area)}
-              <span className="text-muted-foreground/70"> (INEI, 2025)</span>
+              <span className="text-muted-foreground/70"> (Censo 2025)</span>
+              {shape.omit ? ` · ${sinCensar(shape.omit / shape.pob)} sin censar` : ""}
             </p>
           )}
         </div>
@@ -764,6 +765,8 @@ const CHIPS: [Metric, string][] = [
   ["area", "Tamaño"],
 ];
 const MORE_CHIPS: [Metric, string][] = [
+  ["porHabitante", "Obras por habitante"],
+  ["omision", "Gente sin censar"],
   ["inversion", "Presupuesto 2024"],
   ["ejecucion", "Gasto 2024"],
   ["ornato", "Plazas y monumentos"],
@@ -1070,6 +1073,8 @@ const UNIT: Partial<Record<Metric, string>> = {
   digital: "Presencia digital, de 0 a 100 puntos",
   poblacion: "Habitantes (Censo 2025)",
   densidad: "Habitantes por kilómetro cuadrado (Censo 2025)",
+  porHabitante: "Soles de presupuesto para obras por habitante, este año",
+  omision: "Parte de la población que quedó sin censar",
 };
 
 function Legend({ metric, shapes }: { metric: Metric; shapes: Shape[] }) {
@@ -1137,6 +1142,22 @@ function Legend({ metric, shapes }: { metric: Metric; shapes: Shape[] }) {
         colors: stops.map((t) => terracotta(t)),
         lo: `${densidad(r[0])} o menos`,
         hi: `${densidad(r[1])} o más`,
+      };
+    })(),
+    porHabitante: (() => {
+      const r = rangeFor(shapes, "porHabitante");
+      return {
+        colors: stops.map((t) => terracotta(t)),
+        lo: `S/ ${count(Math.round(r[0]))} o menos`,
+        hi: `S/ ${count(Math.round(r[1]))} o más`,
+      };
+    })(),
+    omision: (() => {
+      const r = rangeFor(shapes, "omision");
+      return {
+        colors: stops.map((t) => terracotta(t)),
+        lo: `${(r[0] * 100).toFixed(1)} % o menos`,
+        hi: `${(r[1] * 100).toFixed(1)} % o más`,
       };
     })(),
     digital: (() => {
@@ -1230,6 +1251,10 @@ function sentence(shape: Shape, metric: Metric): string | undefined {
   if (metric === "area") return `Mide ${km2(shape.area)}.`;
   if (metric === "poblacion" && v !== undefined)
     return `Viven ${count(v)} personas, según el Censo 2025 del INEI (personas censadas más las que el INEI estima que quedaron sin censar).`;
+  if (metric === "porHabitante" && v !== undefined)
+    return `Tiene S/ ${count(Math.round(v))} de presupuesto para obras este año por cada persona que vive ahí (${count(shape.pob ?? 0)} habitantes del Censo 2025). Un monto alto no siempre es bienestar: pasa también en lugares con pocos habitantes y un proyecto grande.`;
+  if (metric === "omision" && v !== undefined)
+    return `El censo no logró contar a ${count(shape.omit ?? 0)} de sus ${count(shape.pob ?? 0)} habitantes (${sinCensar(v)}); el INEI los estimó aparte. Mientras más sin censar, menos segura es la cifra de población.`;
   if (metric === "densidad" && v !== undefined)
     return `Hay ${densidad(v)}: ${count(shape.pob ?? 0)} personas en ${km2(shape.area)}.`;
   if (v === undefined) return undefined;
@@ -1289,6 +1314,14 @@ function countryText(data: Dataset, metric: Metric): string | undefined {
       return share(sum((s) => s.mix?.ornato ?? 0), sum((s) => (s.mix ? (s.inv?.pim ?? 0) : 0)));
     case "poblacion":
       return `${count(sum((s) => s.pob ?? 0))} habitantes`;
+    case "porHabitante": {
+      const p = sum((s) => s.pob ?? 0);
+      return p > 0 ? `S/ ${count(Math.round(sum((s) => s.avance?.pim ?? 0) / p))} por habitante` : undefined;
+    }
+    case "omision": {
+      const p = sum((s) => s.pob ?? 0);
+      return p > 0 ? `${sinCensar(sum((s) => s.omit ?? 0) / p)} de la población sin censar` : undefined;
+    }
     case "densidad": {
       const a = sum((s) => s.area);
       return a > 0 ? densidad(sum((s) => s.pob ?? 0) / a) : undefined;
