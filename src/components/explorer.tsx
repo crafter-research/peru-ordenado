@@ -767,6 +767,7 @@ const CHIPS: [Metric, string][] = [
 ];
 const MORE_CHIPS: [Metric, string][] = [
   ["porHabitante", "Obras por habitante"],
+  ["canon", "Canon minero"],
   ["omision", "Gente sin censar"],
   ["inversion", "Presupuesto 2024"],
   ["ejecucion", "Gasto 2024"],
@@ -1077,6 +1078,7 @@ const UNIT: Partial<Record<Metric, string>> = {
   porHabitante: "Soles de presupuesto para obras por habitante, este año",
   omision: "Parte de la población que quedó sin censar",
   internet: "Parte de la gente (3 años o más) que usó internet",
+  canon: "Soles de canon y regalía minera por habitante, 2025",
 };
 
 function Legend({ metric, shapes }: { metric: Metric; shapes: Shape[] }) {
@@ -1148,6 +1150,14 @@ function Legend({ metric, shapes }: { metric: Metric; shapes: Shape[] }) {
     })(),
     porHabitante: (() => {
       const r = rangeFor(shapes, "porHabitante");
+      return {
+        colors: stops.map((t) => terracotta(t)),
+        lo: `S/ ${count(Math.round(r[0]))} o menos`,
+        hi: `S/ ${count(Math.round(r[1]))} o más`,
+      };
+    })(),
+    canon: (() => {
+      const r = rangeFor(shapes, "canon");
       return {
         colors: stops.map((t) => terracotta(t)),
         lo: `S/ ${count(Math.round(r[0]))} o menos`,
@@ -1263,6 +1273,10 @@ function sentence(shape: Shape, metric: Metric): string | undefined {
     return `Viven ${count(v)} personas, según el Censo 2025 del INEI (personas censadas más las que el INEI estima que quedaron sin censar).`;
   if (metric === "porHabitante" && v !== undefined)
     return `Tiene S/ ${count(Math.round(v))} de presupuesto para obras este año por cada persona que vive ahí (${count(shape.pob ?? 0)} habitantes del Censo 2025). Un monto alto no siempre es bienestar: pasa también en lugares con pocos habitantes y un proyecto grande.`;
+  if (metric === "canon" && v !== undefined)
+    return (shape.canon ?? 0) > 0
+      ? `La municipalidad recibió ${soles(shape.canon ?? 0)} de canon y regalía minera en 2025: S/ ${count(Math.round(v))} por cada una de sus ${count(shape.pob ?? 0)} personas.}`
+      : "No recibió canon ni regalía minera en 2025.";
   if (metric === "internet" && v !== undefined)
     return `${de100(v)} de cada 100 personas de 3 años o más usaron internet en los últimos 3 meses (Censo 2025).${
       shape.digital !== undefined
@@ -1334,6 +1348,8 @@ function countryText(data: Dataset, metric: Metric): string | undefined {
       const p = sum((s) => s.pob ?? 0);
       return p > 0 ? `S/ ${count(Math.round(sum((s) => s.avance?.pim ?? 0) / p))} por habitante` : undefined;
     }
+    case "canon":
+      return `S/ ${count(Math.round(sum((s) => s.canon ?? 0) / Math.max(1, sum((s) => s.pob ?? 0))))} por habitante`;
     case "internet":
       return share(sum((s) => s.net ?? 0), sum((s) => s.netBase ?? 0));
     case "omision": {

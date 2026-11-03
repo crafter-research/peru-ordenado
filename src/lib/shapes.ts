@@ -40,6 +40,8 @@ export type Shape = {
   /** Personas de 3 y más años que usaron internet en los últimos 3 meses (Censo 2025) y la base censada. */
   net?: number;
   netBase?: number;
+  /** Soles de canon minero y regalía minera acreditados a la municipalidad en 2025 (MEF). */
+  canon?: number;
   /** muniscan digital-surface index 0–100 (provinces and departments: mean of their districts). */
   digital?: number;
   /**
@@ -64,6 +66,7 @@ export type Metric =
   | "porHabitante"
   | "omision"
   | "internet"
+  | "canon"
   | "inversion"
   | "ejecucion"
   | "quipu"
@@ -92,6 +95,10 @@ export const METRICS: Record<Metric, { label: string; title: string }> = {
   porHabitante: {
     label: "¿Cuánto presupuesto para obras hay por habitante?",
     title: "ordenados por presupuesto de inversión de este año por habitante",
+  },
+  canon: {
+    label: "¿Cuánto canon minero recibe por habitante?",
+    title: "ordenados por canon y regalía minera por habitante (2025)",
   },
   internet: {
     label: "¿Cuánta gente usa internet?",
@@ -149,6 +156,8 @@ const GUIDE: Record<Metric, string> = {
     "Cada forma es un {lugar}. Cuántas personas viven por cada kilómetro cuadrado (Censo 2025 entre el área). Más oscuro: más apretado. Un distrito enorme y casi vacío sale claro aunque tenga mucha gente.",
   porHabitante:
     "Cada forma es un {lugar}. Cuántos soles de presupuesto para obras tiene este año por cada persona que vive ahí (Censo 2025). Más oscuro: más soles por persona. Un distrito pequeño con un proyecto grande sale oscuro sin que eso diga cómo está su gente.",
+  canon:
+    "Cada forma es un {lugar}. Cuántos soles de canon y regalía minera recibió la municipalidad en 2025 por cada persona que vive ahí (Censo 2025). Más oscuro: más soles por persona. Casi todos los distritos reciben algo, pero la diferencia es enorme: la mitad recibe menos de S/ 160 por persona y el más alto pasa de S/ 42,000. Recibir canon no dice si se gasta bien.",
   internet:
     "Cada forma es un {lugar}. De cada 100 personas de 3 años o más que viven ahí, cuántas usaron internet en los últimos 3 meses según el Censo 2025. Más oscuro: más gente conectada. Es lo que la gente hace, no lo que hace su municipalidad.",
   omision:
@@ -186,6 +195,7 @@ export const SOURCE: Record<Metric, string> = {
   porHabitante: "MEF 2026 · INEI",
   omision: "INEI",
   internet: "INEI",
+  canon: "MEF 2025 · INEI",
   inversion: "MEF 2024",
   ejecucion: "MEF 2024",
   quipu: "MEF 2026 · quipu",
@@ -217,6 +227,8 @@ export function value(shape: Shape, metric: Metric): number | undefined {
     return shape.pob !== undefined && shape.area > 0 ? shape.pob / shape.area : undefined;
   if (metric === "porHabitante")
     return shape.pob && shape.avance?.pim ? shape.avance.pim / shape.pob : undefined;
+  if (metric === "canon")
+    return shape.pob && shape.canon !== undefined ? shape.canon / shape.pob : undefined;
   if (metric === "internet")
     return shape.netBase && shape.net !== undefined ? shape.net / shape.netBase : undefined;
   if (metric === "omision")

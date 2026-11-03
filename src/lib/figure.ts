@@ -15,6 +15,7 @@ const UNITS: Partial<Record<Metric, string>> = {
   porHabitante: "soles de presupuesto para obras por habitante este año",
   omision: "de cada 100 personas no fueron censadas",
   internet: "de cada 100 personas usaron internet",
+  canon: "soles de canon y regalía minera por habitante en 2025",
 };
 
 /** The one big number for a place and criterion, with what it counts. Falls back to the size. */
@@ -27,7 +28,7 @@ export function figure(shape: Shape, metric: Metric): { big: string; unit: strin
       ? String(de100(v))
       : metric === "poblacion" || (metric === "densidad" && v >= 10)
         ? Math.round(v).toLocaleString("es-PE")
-        : metric === "porHabitante"
+        : metric === "porHabitante" || metric === "canon"
           ? Math.round(v).toLocaleString("es-PE")
           : metric === "omision"
             ? (v * 100).toFixed(1)

@@ -56,7 +56,7 @@ export function quipuColor(r: number, [lo, hi]: [number, number]): string {
 
 /** Color range for a metric over a set of shapes: percentiles of the ratio for quipu, PIM min/max otherwise. */
 export function rangeFor(shapes: Shape[], metric: Metric): [number, number] {
-  if (metric === "poblacion" || metric === "densidad" || metric === "porHabitante") {
+  if (metric === "poblacion" || metric === "densidad" || metric === "porHabitante" || metric === "canon") {
     const v = shapes
       .flatMap((s) => {
         const x = value(s, metric);
@@ -103,7 +103,7 @@ export function colorFor(
     const v = value(shape, metric);
     return v === undefined ? NO_DATA : quipuColor(v, range);
   }
-  if (metric === "poblacion" || metric === "densidad" || metric === "porHabitante") {
+  if (metric === "poblacion" || metric === "densidad" || metric === "porHabitante" || metric === "canon") {
     const v = value(shape, metric);
     if (v === undefined) return NO_DATA;
     // People and density span orders of magnitude: a log scale between the 5th and 95th percentile.
