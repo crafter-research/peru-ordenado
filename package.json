@@ -19,7 +19,8 @@
     "data:demonyms": "bun scripts/build-demonyms.ts",
     "data:poblacion": "bun scripts/build-poblacion.ts",
     "data:internet": "bun scripts/build-internet.ts",
-    "data:layers": "bun data:names && bun data:quipu && bun data:territory && bun data:demonyms && bun data:poblacion && bun data:internet"
+    "data:canon": "bun scripts/build-canon.ts",
+    "data:layers": "bun data:names && bun data:quipu && bun data:territory && bun data:demonyms && bun data:poblacion && bun data:internet && bun data:canon"
   },
   "packageManager": "bun@1.3.11",
   "dependencies": {

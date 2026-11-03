@@ -47,6 +47,7 @@ const SAYS: Partial<Record<Metric, [string, string]>> = {
   digital: ["tiene más presencia digital", "tiene menos presencia digital"],
   poblacion: ["tiene más habitantes", "tiene menos habitantes"],
   porHabitante: ["tiene más presupuesto para obras por habitante", "tiene menos presupuesto para obras por habitante"],
+  canon: ["recibe más canon minero por habitante", "recibe menos canon minero por habitante"],
   internet: ["tiene más gente que usa internet", "tiene menos gente que usa internet"],
   omision: ["tiene más gente que el censo no logró contar", "tiene menos gente que el censo no logró contar"],
   densidad: ["está más poblado por kilómetro cuadrado", "está menos poblado por kilómetro cuadrado"],

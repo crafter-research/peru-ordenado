@@ -61,7 +61,7 @@ export function valueLabel(shape: Shape, metric: Metric): string {
     const d = value(shape, metric);
     return d === undefined ? "sin datos" : `${d < 10 ? d.toFixed(1) : count(d)} hab/km²`;
   }
-  if (metric === "porHabitante") {
+  if (metric === "porHabitante" || metric === "canon") {
     const v = value(shape, metric);
     return v === undefined ? "sin datos" : `S/ ${count(Math.round(v))}`;
   }
