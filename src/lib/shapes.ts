@@ -37,6 +37,9 @@ export type Shape = {
   pob?: number;
   /** Parte de `pob` que el INEI estima que quedó sin censar (omitida). */
   omit?: number;
+  /** Personas de 3 y más años que usaron internet en los últimos 3 meses (Censo 2025) y la base censada. */
+  net?: number;
+  netBase?: number;
   /** muniscan digital-surface index 0–100 (provinces and departments: mean of their districts). */
   digital?: number;
   /**
@@ -60,6 +63,7 @@ export type Metric =
   | "densidad"
   | "porHabitante"
   | "omision"
+  | "internet"
   | "inversion"
   | "ejecucion"
   | "quipu"
@@ -88,6 +92,10 @@ export const METRICS: Record<Metric, { label: string; title: string }> = {
   porHabitante: {
     label: "¿Cuánto presupuesto para obras hay por habitante?",
     title: "ordenados por presupuesto de inversión de este año por habitante",
+  },
+  internet: {
+    label: "¿Cuánta gente usa internet?",
+    title: "ordenados por % de personas que usaron internet (Censo 2025)",
   },
   omision: {
     label: "¿Cuánta gente no fue censada?",
@@ -141,6 +149,8 @@ const GUIDE: Record<Metric, string> = {
     "Cada forma es un {lugar}. Cuántas personas viven por cada kilómetro cuadrado (Censo 2025 entre el área). Más oscuro: más apretado. Un distrito enorme y casi vacío sale claro aunque tenga mucha gente.",
   porHabitante:
     "Cada forma es un {lugar}. Cuántos soles de presupuesto para obras tiene este año por cada persona que vive ahí (Censo 2025). Más oscuro: más soles por persona. Un distrito pequeño con un proyecto grande sale oscuro sin que eso diga cómo está su gente.",
+  internet:
+    "Cada forma es un {lugar}. De cada 100 personas de 3 años o más que viven ahí, cuántas usaron internet en los últimos 3 meses según el Censo 2025. Más oscuro: más gente conectada. Es lo que la gente hace, no lo que hace su municipalidad.",
   omision:
     "Cada forma es un {lugar}. De cada 100 personas que viven ahí, cuántas el censo no logró contar y el INEI estimó aparte. Más oscuro: más gente sin censar, así que su cifra de población es menos segura.",
   inversion:
@@ -175,6 +185,7 @@ export const SOURCE: Record<Metric, string> = {
   densidad: "INEI · IGN",
   porHabitante: "MEF 2026 · INEI",
   omision: "INEI",
+  internet: "INEI",
   inversion: "MEF 2024",
   ejecucion: "MEF 2024",
   quipu: "MEF 2026 · quipu",
@@ -206,6 +217,8 @@ export function value(shape: Shape, metric: Metric): number | undefined {
     return shape.pob !== undefined && shape.area > 0 ? shape.pob / shape.area : undefined;
   if (metric === "porHabitante")
     return shape.pob && shape.avance?.pim ? shape.avance.pim / shape.pob : undefined;
+  if (metric === "internet")
+    return shape.netBase && shape.net !== undefined ? shape.net / shape.netBase : undefined;
   if (metric === "omision")
     return shape.pob && shape.omit !== undefined ? shape.omit / shape.pob : undefined;
   if (metric === "quipu")

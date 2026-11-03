@@ -67,13 +67,13 @@ export function rangeFor(shapes: Shape[], metric: Metric): [number, number] {
     const at = (p: number) => v[Math.min(v.length - 1, Math.floor(p * v.length))];
     return [at(0.05), Math.max(at(0.95), at(0.05) * 2)];
   }
-  if (metric === "quipu" || metric === "digital" || metric === "omision") {
+  if (metric === "quipu" || metric === "digital" || metric === "omision" || metric === "internet") {
     const v = shapes
       .flatMap((s) =>
         metric === "digital"
           ? s.digital === undefined ? [] : [s.digital]
-          : metric === "omision"
-            ? value(s, "omision") === undefined ? [] : [value(s, "omision") as number]
+          : metric === "omision" || metric === "internet"
+            ? value(s, metric) === undefined ? [] : [value(s, metric) as number]
             : s.avance?.pim ? [s.avance.dev / s.avance.pim] : [],
       )
       .sort((a, b) => a - b);
@@ -99,7 +99,7 @@ export function colorFor(
     const t = hi > lo ? Math.max(0, Math.min(1, (shape.digital - lo) / (hi - lo))) : 0.5;
     return digitalColor(20 + t * 50);
   }
-  if (metric === "omision") {
+  if (metric === "omision" || metric === "internet") {
     const v = value(shape, metric);
     return v === undefined ? NO_DATA : quipuColor(v, range);
   }

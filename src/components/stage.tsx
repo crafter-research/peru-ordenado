@@ -71,7 +71,7 @@ export function valueLabel(shape: Shape, metric: Metric): string {
   }
   if (metric === "digital")
     return shape.digital === undefined ? "sin datos" : `${shape.digital}/100`;
-  if (metric === "ornato" || metric === "quipu" || metric === "cobertura") {
+  if (metric === "ornato" || metric === "quipu" || metric === "cobertura" || metric === "internet") {
     const v = value(shape, metric);
     return v === undefined ? "sin datos" : pct(v);
   }

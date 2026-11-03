@@ -14,6 +14,7 @@ const UNITS: Partial<Record<Metric, string>> = {
   densidad: "habitantes por km² (Censo 2025)",
   porHabitante: "soles de presupuesto para obras por habitante este año",
   omision: "de cada 100 personas no fueron censadas",
+  internet: "de cada 100 personas usaron internet",
 };
 
 /** The one big number for a place and criterion, with what it counts. Falls back to the size. */
@@ -21,7 +22,7 @@ export function figure(shape: Shape, metric: Metric): { big: string; unit: strin
   const v = value(shape, metric);
   const unit = UNITS[metric];
   if (v !== undefined && unit) {
-    const pctLike = ["quipu", "ejecucion", "ornato", "cobertura"].includes(metric);
+    const pctLike = ["quipu", "ejecucion", "ornato", "cobertura", "internet"].includes(metric);
     const big = pctLike
       ? String(de100(v))
       : metric === "poblacion" || (metric === "densidad" && v >= 10)
