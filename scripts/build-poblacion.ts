@@ -1,5 +1,5 @@
 // Población proyectada (INEI, 30 de junio) a public/data/shapes.json. Entrada: data/poblacion-2025.json,
-// generado por scripts/poblacion.py. Distritos, provincias y departamentos traen su propia cifra oficial.
+// generado por scripts/censo.py (Censo 2025). Distritos, provincias y departamentos traen su propia cifra oficial.
 // Idempotente: se puede correr sin rehacer `data:build`.
 import type { Dataset, Shape } from "../src/lib/shapes";
 
@@ -20,7 +20,7 @@ for (const level of ["dep", "prov", "dist"] as const) {
     }
   }
 }
-data.sources.pob = `INEI, población total proyectada al 30 de junio de ${año} (referencial)`;
+data.sources.pob = `INEI, Censos Nacionales ${año}: población total (censada y omitida)`;
 await Bun.write("public/data/shapes.json", JSON.stringify(data));
 const total = data.dep.reduce((t, d) => t + (d.pob ?? 0), 0);
 console.log(`población ${año}: ${n} distritos de ${data.dist.length} · ${total.toLocaleString("es-PE")} habitantes`);

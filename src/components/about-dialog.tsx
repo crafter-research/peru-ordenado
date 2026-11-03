@@ -171,9 +171,9 @@ export function AboutDialog({
               cuenta. <strong>Zonas críticas:</strong> inventario de peligros
               geológicos del INGEMMET, solo en unos 1,000 distritos; el resto es
               sin datos, no cero. <strong>Población y densidad:</strong>{" "}
-              población total proyectada por el INEI al 30 de junio de 2025
-              (cifra referencial, hecha antes del Censo 2025: puede diferir del conteo); la densidad es esa
-              población entre el área del distrito. <strong>Gentilicios:</strong> los de los 25
+              población total del Censo 2025 del INEI (censada más omitida,
+              con los límites vigentes al 15 de julio de 2026); la densidad es
+              esa población entre el área del distrito. <strong>Gentilicios:</strong> los de los 25
               departamentos escritos a mano; el resto, tal como dice la ficha
               de Wikipedia de cada lugar, sin verificar uno por uno. Los
               nombres con tilde salen de Wikidata más una revisión a mano.

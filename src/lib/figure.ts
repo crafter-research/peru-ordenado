@@ -10,8 +10,8 @@ const UNITS: Partial<Record<Metric, string>> = {
   emergencias: "decretos de emergencia entre 2017 y 2024",
   zonas: "zonas críticas por peligros geológicos",
   digital: "puntos de 100 en presencia digital",
-  poblacion: "habitantes (proyección INEI 2025)",
-  densidad: "habitantes por km² (proyección INEI 2025)",
+  poblacion: "habitantes (Censo 2025)",
+  densidad: "habitantes por km² (Censo 2025)",
 };
 
 /** The one big number for a place and criterion, with what it counts. Falls back to the size. */

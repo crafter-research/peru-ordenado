@@ -1068,8 +1068,8 @@ const UNIT: Partial<Record<Metric, string>> = {
   emergencias: "Estados de emergencia declarados, 2017-2024",
   zonas: "Zonas críticas por derrumbes y huaicos",
   digital: "Presencia digital, de 0 a 100 puntos",
-  poblacion: "Habitantes (proyección INEI 2025)",
-  densidad: "Habitantes por kilómetro cuadrado (proyección 2025)",
+  poblacion: "Habitantes (Censo 2025)",
+  densidad: "Habitantes por kilómetro cuadrado (Censo 2025)",
 };
 
 function Legend({ metric, shapes }: { metric: Metric; shapes: Shape[] }) {
@@ -1229,7 +1229,7 @@ function sentence(shape: Shape, metric: Metric): string | undefined {
   const v = value(shape, metric);
   if (metric === "area") return `Mide ${km2(shape.area)}.`;
   if (metric === "poblacion" && v !== undefined)
-    return `Viven ${count(v)} personas, según la proyección que el INEI hizo antes del Censo 2025. Es una estimación y puede diferir del conteo del censo.`;
+    return `Viven ${count(v)} personas, según el Censo 2025 del INEI (personas censadas más las que el INEI estima que quedaron sin censar).`;
   if (metric === "densidad" && v !== undefined)
     return `Hay ${densidad(v)}: ${count(shape.pob ?? 0)} personas en ${km2(shape.area)}.`;
   if (v === undefined) return undefined;
