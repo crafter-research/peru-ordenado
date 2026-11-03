@@ -143,7 +143,8 @@ export function AboutDialog({
               100 o más entidades) y publicar trámites y normas (20 %, un piso
               legal más que un logro). Los pesos son una decisión de diseño,
               no un ajuste estadístico, y cada eje se divide entre el máximo de
-              la corrida: 100 es la mejor del país, no un puntaje perfecto.
+              la corrida: 100 sería ser la mejor en los tres ejes a la vez. En la
+              corrida de agosto de 2026 la más alta saca 94.
               El método completo está en{" "}
               <a
                 href="https://github.com/crafter-research/muniscan/blob/main/METHOD.md"
